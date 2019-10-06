@@ -1,0 +1,9 @@
+scipy
+pytest
+numpy
+torch
+torchvision
+scikit-image
+pillow==4.1.1
+opencv-python
+matplotlib
