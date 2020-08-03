@@ -672,6 +672,12 @@ class ColorJitter(object):
             [-hue, hue]. Should be >=0 and <= 0.5.
     """
     def __init__(self, brightness=0, contrast=0, saturation=0, hue=0):
+
+        assert isinstance(brightness, float) or (isinstance(brightness, collections.Iterable) and len(brightness) == 2)
+        assert isinstance(contrast, float) or (isinstance(contrast, collections.Iterable) and len(contrast) == 2)
+        assert isinstance(saturation, float) or (isinstance(saturation, collections.Iterable) and len(saturation) == 2)
+        assert isinstance(hue, float) or (isinstance(hue, collections.Iterable) and len(hue) == 2)
+        
         self.brightness = brightness
         self.contrast = contrast
         self.saturation = saturation
@@ -688,25 +694,50 @@ class ColorJitter(object):
             saturation in a random order.
         """
         transforms = []
-        if brightness > 0:
-            brightness_factor = random.uniform(max(0, 1 - brightness), 1 + brightness)
-            transforms.append(Lambda(lambda img: F.adjust_brightness(img, brightness_factor)))
 
-        if contrast > 0:
-            contrast_factor = random.uniform(max(0, 1 - contrast), 1 + contrast)
-            transforms.append(Lambda(lambda img: F.adjust_contrast(img, contrast_factor)))
+        if isinstance(brightness, numbers.Number):
+        
+            if brightness > 0:
+                brightness_factor = random.uniform(max(0, 1 - brightness), 1 + brightness)
+                transforms.append(Lambda(lambda img: F.adjust_brightness(img, brightness_factor)))
 
-        if saturation > 0:
-            saturation_factor = random.uniform(max(0, 1 - saturation), 1 + saturation)
-            transforms.append(Lambda(lambda img: F.adjust_saturation(img, saturation_factor)))
+            if contrast > 0:
+                contrast_factor = random.uniform(max(0, 1 - contrast), 1 + contrast)
+                transforms.append(Lambda(lambda img: F.adjust_contrast(img, contrast_factor)))
 
-        if hue > 0:
-            hue_factor = random.uniform(-hue, hue)
-            transforms.append(Lambda(lambda img: F.adjust_hue(img, hue_factor)))
+            if saturation > 0:
+                saturation_factor = random.uniform(max(0, 1 - saturation), 1 + saturation)
+                transforms.append(Lambda(lambda img: F.adjust_saturation(img, saturation_factor)))
 
+            if hue > 0:
+                hue_factor = random.uniform(-hue, hue)
+                transforms.append(Lambda(lambda img: F.adjust_hue(img, hue_factor)))
+
+        
+        else:
+
+            if brightness[0] > 0 and brightness[1] > 0:  
+                
+                brightness_factor = random.uniform(brightness[0], brightness[1])
+                transforms.append(Lambda(lambda img: F.adjust_brightness(img, brightness_factor)))
+
+            if contrast[0] > 0 and contrast[1] > 0:
+
+                contrast_factor = random.uniform(contrast[0], contrast[1])
+                transforms.append(Lambda(lambda img: F.adjust_contrast(img, contrast_factor)))
+
+            if saturation[0] > 0 and saturation[1] > 0:
+            
+                saturation_factor = random.uniform(saturation[0], saturation[1])
+                transforms.append(Lambda(lambda img: F.adjust_saturation(img, saturation_factor)))
+
+            if hue[0] > 0 and hue[1] > 0:
+                hue_factor = random.uniform(hue[0], hue[1])
+                transforms.append(Lambda(lambda img: F.adjust_hue(img, hue_factor)))
+            
         random.shuffle(transforms)
         transform = Compose(transforms)
-
+        
         return transform
 
     def __call__(self, img):
