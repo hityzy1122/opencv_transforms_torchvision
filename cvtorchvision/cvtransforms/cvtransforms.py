@@ -3,6 +3,8 @@ import torch
 import math
 import random
 import cv2
+cv2.setNumThreads(0)
+cv2.ocl.setUseOpenCL(False)
 import numpy as np
 import numbers
 import types
