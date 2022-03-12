@@ -4,6 +4,6 @@ numpy
 torch
 torchvision
 scikit-image
-pillow==8.1.1
+pillow==9.0.1
 opencv-python
 matplotlib
