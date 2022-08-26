@@ -8,9 +8,9 @@ cv2.ocl.setUseOpenCL(False)
 import numpy as np
 import numbers
 import types
-import collections
+import collections.abc as collections
 
-from cvtorchvision.cvtransforms import cvfunctional as F
+from . import cvfunctional as F
 
 
 __all__ = ["Compose", "ToTensor", "ToCVImage",

@@ -9,7 +9,7 @@ cv2.ocl.setUseOpenCL(False)
 import numpy as np
 import numbers
 import types
-import collections
+import collections.abc as collections
 import warnings
 import matplotlib.pyplot as plt
 from torchvision.transforms import functional
@@ -285,7 +285,7 @@ def crop(img, x, y, h, w):
 def center_crop(img, output_size):
     if isinstance(output_size, numbers.Number):
         output_size = (int(output_size), int(output_size))
-    h, w, _ = img.shape
+    h, w = img.shape[:2]
     th, tw = output_size
     i = int(round((h - th) * 0.5))
     j = int(round((w - tw) * 0.5))
