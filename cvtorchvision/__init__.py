@@ -1,1 +1,1 @@
-from cvtorchvision import cvtransforms
+from . import cvtransforms
